@@ -1,7 +1,5 @@
 #lang racket
 
-(define sample (list 10 21 32 43 54 65))
-
 (define (square x) (* x x))
 
 (define (addSquareDigits x)
@@ -11,4 +9,24 @@
 	)
 )
 
-(map addSquareDigits sample)
+(define (ishappy? x hist)
+	(cond
+		[(= x 1) #t]
+		[(member x hist) #f]
+		[else (ishappy? (addSquareDigits x) (cons x hist))]
+	)
+)
+
+(define (findHappyNumbers n s result)
+	(cond
+		[(< n 1) (sort result <)]
+		[(ishappy? s empty)
+			(findHappyNumbers (- n 1) (+ s 1) (cons s result))
+		]
+		[else
+			(findHappyNumbers n (+ s 1) result)
+		]
+	)
+)
+
+(findHappyNumbers 10 1 empty)
